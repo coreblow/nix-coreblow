@@ -1,5 +1,5 @@
 {
-  description = "Nix packaging for CoreBlow";
+  description = "Nix packaging for CoreBlow Sovereign Agent-OS & Desktop Studio";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -12,15 +12,42 @@
       packages = forAllSystems (system:
         let
           pkgs = import nixpkgs { inherit system; };
+          isDarwin = pkgs.stdenv.isDarwin;
         in
-        {
-          default = pkgs.writeShellApplication {
+        rec {
+          default = coreblow;
+
+          coreblow = pkgs.writeShellApplication {
             name = "coreblow";
-            runtimeInputs = [ pkgs.nodejs_22 ];
+            runtimeInputs = [ pkgs.nodejs_22 pkgs.pnpm pkgs.git ];
             text = ''
-              exec node -e 'console.log("CoreBlow Nix package placeholder")'
+              if command -v coreblow >/dev/null 2>&1; then
+                exec coreblow "$@"
+              else
+                exec npx -y coreblow@latest "$@"
+              fi
             '';
           };
+
+          coreblow-studio = if isDarwin then pkgs.stdenv.mkDerivation {
+            pname = "coreblow-studio";
+            version = "2.0.0";
+            src = ./.;
+            installPhase = ''
+              mkdir -p $out/Applications
+              if [ -d "dist/CoreBlow.app" ]; then
+                cp -R dist/CoreBlow.app $out/Applications/
+              elif [ -d "CoreBlow.app" ]; then
+                cp -R CoreBlow.app $out/Applications/
+              fi
+            '';
+            meta = with pkgs.lib; {
+              description = "CoreBlow Sovereign Autonomous Agent-OS Desktop Studio";
+              homepage = "https://coreblow.com";
+              license = licenses.mit;
+              platforms = platforms.darwin;
+            };
+          } else null;
         });
 
       devShells = forAllSystems (system:
@@ -29,7 +56,7 @@
         in
         {
           default = pkgs.mkShell {
-            packages = [ pkgs.nodejs_22 pkgs.pnpm ];
+            packages = [ pkgs.nodejs_22 pkgs.pnpm pkgs.git ];
           };
         });
     };

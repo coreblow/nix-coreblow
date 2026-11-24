@@ -17,29 +17,54 @@
         rec {
           default = coreblow;
 
-          coreblow = pkgs.writeShellApplication {
-            name = "coreblow";
-            runtimeInputs = [ pkgs.nodejs_22 pkgs.pnpm pkgs.git ];
-            text = ''
-              if command -v coreblow >/dev/null 2>&1; then
-                exec coreblow "$@"
-              else
-                exec npx -y coreblow@latest "$@"
-              fi
+          coreblow = pkgs.stdenv.mkDerivation rec {
+            pname = "coreblow";
+            version = "2.1.2";
+
+            src = pkgs.fetchurl {
+              url = "https://registry.npmjs.org/coreblow/-/coreblow-${version}.tgz";
+              sha256 = "7c659ddcbf23deefba63de137ff9a86e4c472167f99b4d8b213afbe0805b1eaf";
+            };
+
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            buildInputs = [ pkgs.nodejs_22 ];
+
+            dontBuild = true;
+
+            installPhase = ''
+              runHook preInstall
+              mkdir -p $out/lib/node_modules/coreblow $out/bin
+              cp -r . $out/lib/node_modules/coreblow
+              makeWrapper ${pkgs.nodejs_22}/bin/node $out/bin/coreblow \
+                --add-flags "$out/lib/node_modules/coreblow/dist/entry.js"
+              runHook postInstall
             '';
+
+            meta = with pkgs.lib; {
+              description = "CoreBlow Sovereign Autonomous Agent-OS & Enterprise AI Gateway CLI";
+              homepage = "https://coreblow.com";
+              license = licenses.mit;
+              platforms = platforms.all;
+              mainProgram = "coreblow";
+            };
           };
 
           coreblow-studio = if isDarwin then pkgs.stdenv.mkDerivation {
             pname = "coreblow-studio";
-            version = "2.0.0";
+            version = "2.1.2";
             src = ./.;
+            dontBuild = true;
             installPhase = ''
+              runHook preInstall
               mkdir -p $out/Applications
               if [ -d "dist/CoreBlow.app" ]; then
                 cp -R dist/CoreBlow.app $out/Applications/
               elif [ -d "CoreBlow.app" ]; then
                 cp -R CoreBlow.app $out/Applications/
+              else
+                echo "Notice: CoreBlow.app not found in source tree. Pre-built binaries are distributed via official DMG packages."
               fi
+              runHook postInstall
             '';
             meta = with pkgs.lib; {
               description = "CoreBlow Sovereign Autonomous Agent-OS Desktop Studio";

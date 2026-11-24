@@ -1,0 +1,15 @@
+{
+  "name": "@coreblow/nix-coreblow",
+  "version": "2.1.2",
+  "private": true,
+  "description": "Nix packaging and flake for CoreBlow",
+  "license": "MIT",
+  "author": "Febrinanda and CoreBlow contributors",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "test": "node scripts/check-nix-flake.mjs"
+  }
+}

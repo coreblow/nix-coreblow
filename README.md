@@ -1,48 +1,56 @@
 # Nix CoreBlow
 
-Nix packaging for CoreBlow.
+Deterministic Nix packaging and flake derivation for CoreBlow Sovereign Agent-OS & Desktop Studio.
 
 ## Overview
 
-Nix CoreBlow is part of the CoreBlow public repository family. Nix packaging for CoreBlow.
+Nix CoreBlow is part of the CoreBlow public repository family. It provides fully reproducible, hermetic Nix derivations for CoreBlow CLI and CoreBlow Studio on Linux (`x86_64`, `aarch64`) and macOS (`x86_64-darwin`, `aarch64-darwin`).
 
 This repository follows the same ecosystem split that CoreBlow uses to keep release surfaces small, auditable, and independently governed.
 
 ## Repository Role
 
+- Status: Active
 - Phase: 5
 - Priority: distribution
 - Kind: nix
 - Family: CoreBlow public repository family
 - Branding: CoreBlow
 
-## Scope
+## Features
 
-- Nix flake definitions.
-- Package reproducibility checks.
-- Installer integration for Nix-based operators.
+- **Deterministic Derivation**: Pinned directly to the official CoreBlow v2.1.2 release tarball with verified SHA-256 checksum (`7c659ddcbf23deefba63de137ff9a86e4c472167f99b4d8b213afbe0805b1eaf`).
+- **Zero Dynamic Wrappers**: Replaces unpinned runtime wrappers with a native Node 22 wrapped binary entrypoint.
+- **Darwin Platform Guarding**: Guards macOS CoreBlow Studio packaging with graceful fallback notifications for head builds.
+- **Multi-Architecture Flake**: Supports `aarch64-darwin`, `aarch64-linux`, `x86_64-darwin`, and `x86_64-linux`.
 
-## Out of Scope
+## Usage
 
-- Release version changes without approval.
-- Non-Nix installer behavior.
-
-## Key Files
-
-- `.gitignore`
-- `flake.nix`
-- `.github/CODEOWNERS`
-- `.github/dependabot.yml`
-- `.github/ISSUE_TEMPLATE/bug_report.yml`
-- `.github/ISSUE_TEMPLATE/config.yml`
-- `.github/pull_request_template.md`
-- `.github/workflows/ci.yml`
-
-## Development
-
-### Check
+### Run with Nix
 
 ```sh
+# Run CoreBlow CLI directly via flake
+nix run github:coreblow/nix-coreblow -- --help
+
+# Enter reproducible development shell
+nix develop github:coreblow/nix-coreblow
+```
+
+### Install into Profile
+
+```sh
+nix profile install github:coreblow/nix-coreblow
+```
+
+## Development & Verification
+
+### Test / Check
+
+```sh
+# Verify flake derivation structure, version, and checksums
+npm test
+
+# If Nix is installed locally:
 nix flake check
 ```
 

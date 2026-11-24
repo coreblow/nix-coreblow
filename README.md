@@ -19,7 +19,7 @@ This repository follows the same ecosystem split that CoreBlow uses to keep rele
 
 ## Features
 
-- **Deterministic Derivation**: Pinned directly to the official CoreBlow v2.1.2 release tarball with verified SHA-256 checksum (`7c659ddcbf23deefba63de137ff9a86e4c472167f99b4d8b213afbe0805b1eaf`).
+- **Deterministic Derivation**: Pinned directly to the official CoreBlow v2.1.3 release tarball with verified SHA-256 checksum (`eb1502b4a13efb2a7f45d54311fafcc4e73c22fc54c697e9ae0cf8805c383d3b`).
 - **Zero Dynamic Wrappers**: Replaces unpinned runtime wrappers with a native Node 22 wrapped binary entrypoint.
 - **Darwin Platform Guarding**: Guards macOS CoreBlow Studio packaging with graceful fallback notifications for head builds.
 - **Multi-Architecture Flake**: Supports `aarch64-darwin`, `aarch64-linux`, `x86_64-darwin`, and `x86_64-linux`.

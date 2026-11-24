@@ -14,13 +14,13 @@ const flakeContent = fs.readFileSync(flakePath, "utf8");
 
 // 1. Version checks
 console.log("1. Checking version alignment...");
-assert.match(flakeContent, /version\s*=\s*"2\.1\.3"/, "flake.nix must pin canonical version 2.1.3");
+assert.match(flakeContent, /version\s*=\s*"2\.1\.4"/, "flake.nix must pin canonical version 2.1.4");
 assert.doesNotMatch(flakeContent, /"2\.0\.0"/, "Old 2.0.0 version must be removed");
 
 // 2. Deterministic source URL and hash
 console.log("2. Checking deterministic pinned tarball source and SHA-256...");
 const expectedUrl = "https://registry.npmjs.org/coreblow/-/coreblow-${version}.tgz";
-const expectedSha256 = "eb1502b4a13efb2a7f45d54311fafcc4e73c22fc54c697e9ae0cf8805c383d3b";
+const expectedSha256 = "793ccb921892740ca942e04be8f754f6cc1207c3d1be3a39936ac25c20dccfc5";
 
 assert.ok(flakeContent.includes(expectedUrl), `flake.nix must reference pinned URL: ${expectedUrl}`);
 assert.ok(flakeContent.includes(expectedSha256), `flake.nix must pin SHA-256: ${expectedSha256}`);

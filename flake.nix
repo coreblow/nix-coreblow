@@ -19,11 +19,11 @@
 
           coreblow = pkgs.stdenv.mkDerivation rec {
             pname = "coreblow";
-            version = "2.1.4";
+            version = "2.1.5";
 
             src = pkgs.fetchurl {
               url = "https://registry.npmjs.org/coreblow/-/coreblow-${version}.tgz";
-              sha256 = "793ccb921892740ca942e04be8f754f6cc1207c3d1be3a39936ac25c20dccfc5";
+              sha256 = "2c42a123582aa86e2b2282d4f0453d8422389a77cd65e81afdcc08ace893eea5";
             };
 
             nativeBuildInputs = [ pkgs.makeWrapper ];

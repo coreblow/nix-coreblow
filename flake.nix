@@ -12,11 +12,7 @@
       packages = forAllSystems (system:
         let
           pkgs = import nixpkgs { inherit system; };
-          isDarwin = pkgs.stdenv.isDarwin;
-        in
-        rec {
-          default = coreblow;
-
+          isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
           coreblow = pkgs.stdenv.mkDerivation rec {
             pname = "coreblow";
             version = "2.2.0";
@@ -48,10 +44,15 @@
               mainProgram = "coreblow";
             };
           };
-
-          coreblow-studio = if isDarwin then pkgs.stdenv.mkDerivation {
+        in
+        {
+          default = coreblow;
+          inherit coreblow;
+        }
+        // pkgs.lib.optionalAttrs isDarwin {
+          coreblow-studio = pkgs.stdenv.mkDerivation {
             pname = "coreblow-studio";
-            version = "2.1.2";
+            version = "2.2.0";
             src = ./.;
             dontBuild = true;
             installPhase = ''
@@ -72,7 +73,7 @@
               license = licenses.mit;
               platforms = platforms.darwin;
             };
-          } else null;
+          };
         });
 
       devShells = forAllSystems (system:

@@ -85,5 +85,11 @@
             packages = [ pkgs.nodejs_22 pkgs.pnpm pkgs.git ];
           };
         });
+
+      formatter = forAllSystems (system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        pkgs.nixfmt-rfc-style);
     };
 }

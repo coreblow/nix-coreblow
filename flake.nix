@@ -15,11 +15,11 @@
           isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
           coreblow = pkgs.stdenv.mkDerivation rec {
             pname = "coreblow";
-            version = "2.2.0";
+            version = "2.3.0";
 
             src = pkgs.fetchurl {
               url = "https://registry.npmjs.org/coreblow/-/coreblow-${version}.tgz";
-              sha256 = "109b18526aa8fb50ff34a046f8023c08cfa236fa9a64a577924d9be4e3bb0a07";
+              sha256 = "d84fd96c60be97f0c865987f214bdfc27f46f1ef68193fe8904d7f5711bb56d7";
             };
 
             nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -52,7 +52,7 @@
         // pkgs.lib.optionalAttrs isDarwin {
           coreblow-studio = pkgs.stdenv.mkDerivation {
             pname = "coreblow-studio";
-            version = "2.2.0";
+            version = "2.3.0";
             src = ./.;
             dontBuild = true;
             installPhase = ''
